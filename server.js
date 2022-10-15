@@ -1,7 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 
+const { readdirSync } = require('fs');
+
 const app = express();
+
+// ============== cors setup start======================
 
 // allowed sites that can request this facebook-backend server resources
 const allowed = ['http://localhost:3000'];
@@ -25,8 +29,9 @@ function options(req, res) {
 
 app.use(cors(options));
 
-app.get('/', (req, res) => {
-  res.send('Welcome home');
-});
+// ============== cors setup end ======================
+
+// dynamically create APIs by reading routes directory
+readdirSync('./routes').map((r) => app.use('/', require('./routes/' + r)));
 
 app.listen(8000, () => console.log('Server is listening on port 8000'));
