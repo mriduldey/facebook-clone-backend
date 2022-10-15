@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 const { readdirSync } = require('fs');
 
@@ -36,5 +37,14 @@ app.use(cors(options));
 // dynamically create APIs by reading routes directory
 readdirSync('./routes').map((r) => app.use('/', require('./routes/' + r)));
 
-const port = process.env || 8000;
+//database connect
+mongoose
+  .connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,
+  })
+  .then(() => console.log('Databse connected successfully'))
+  .catch((err) => console.log(err.message));
+
+// Run facebook-clone server
+const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Server is listening on port ${port}`));
