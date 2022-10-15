@@ -1,8 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+const dotenv = require('dotenv');
 
 const { readdirSync } = require('fs');
 
+dotenv.config();
 const app = express();
 
 // ============== cors setup start======================
@@ -34,4 +36,5 @@ app.use(cors(options));
 // dynamically create APIs by reading routes directory
 readdirSync('./routes').map((r) => app.use('/', require('./routes/' + r)));
 
-app.listen(8000, () => console.log('Server is listening on port 8000'));
+const port = process.env || 8000;
+app.listen(port, () => console.log(`Server is listening on port ${port}`));
