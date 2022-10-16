@@ -6,8 +6,11 @@ const mongoose = require('mongoose');
 const { readdirSync } = require('fs');
 
 dotenv.config();
-const app = express();
 
+// stop plurarizing schemas | without it schema "User" will take only "users" as collection
+mongoose.pluralize(null);
+const app = express();
+app.use(express.json());
 // ============== cors setup start======================
 
 // allowed sites that can request this facebook-backend server resources
@@ -41,6 +44,7 @@ readdirSync('./routes').map((r) => app.use('/', require('./routes/' + r)));
 mongoose
   .connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
+    dbName: 'facebook',
   })
   .then(() => console.log('Databse connected successfully'))
   .catch((err) => console.log(err.message));
