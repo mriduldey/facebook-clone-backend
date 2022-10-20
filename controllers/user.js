@@ -6,6 +6,7 @@ const {
 } = require('../helpers/validation');
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../helpers/tokens');
+const { sendVerificationMail } = require('../helpers/mailer');
 
 exports.register = async (req, res) => {
   try {
@@ -77,6 +78,9 @@ exports.register = async (req, res) => {
 
     console.log('token', emailVerificationToken);
     res.json(user);
+
+    const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
+    sendVerificationMail(user.email, user.first_name, url);
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ message: err.message });
