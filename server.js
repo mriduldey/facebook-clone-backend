@@ -19,7 +19,6 @@ const allowed = ['http://localhost:3000'];
 function options(req, res) {
   let tmp;
   let origin = req.header('Origin');
-  console.log('origin', origin);
   if (allowed.indexOf(origin) > -1) {
     tmp = {
       origin: true,
